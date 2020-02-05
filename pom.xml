@@ -19,6 +19,14 @@
     <spring-cloud.version>Hoxton.SR1</spring-cloud.version>
     <lombok.version>1.18.10</lombok.version>
     <mockito-core.version>2.10.0</mockito-core.version>
+    <skipUTs>false</skipUTs>
+    <skipITs>false</skipITs>
+    <skipJacocoAggregate>false</skipJacocoAggregate>
+    <maven.jacoco.plugin.version>0.8.0</maven.jacoco.plugin.version>
+    <jacoco.execs.directory>${project.basedir}/../target/jacoco</jacoco.execs.directory>
+    <jacoco.ut.exec>${jacoco.execs.directory}/jacoco.exec</jacoco.ut.exec>
+    <jacoco.it.exec>${jacoco.execs.directory}/jacoco-it.exec</jacoco.it.exec>
+    <jacoco.aggregate.exec>${jacoco.execs.directory}/jacoco-aggregate.exec</jacoco.aggregate.exec>
   </properties>
 
   <dependencies>
@@ -104,6 +112,40 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
+
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${maven.jacoco.plugin.version}</version>
+        <configuration>
+          <excludes>
+            <exclude>**/*CoreVoyageApplication.*</exclude>
+          </excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>pre-unit-test</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>post-unit-test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+              <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
 
