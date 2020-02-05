@@ -4,7 +4,6 @@ import edu.knoldus.com.handsonspringboot.exceptions.InvalidNameException;
 import edu.knoldus.com.handsonspringboot.models.User;
 import edu.knoldus.com.handsonspringboot.repository.UserDaoLayer;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,21 +23,20 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/edu")
 @Slf4j
-public class SpringRestController {
+public class UserDaoController {
     
     @Value("${name:NOT-FOUND}")
     private String name;
     
-    @Autowired
-    private UserDaoLayer reactiveCouchbaseRepository;
+    private UserDaoLayer userDaoLayer;
     
-    /*public SpringRestController(ReactiveCouchbaseRepository reactiveCouchbaseRepository) {
-        this.reactiveCouchbaseRepository = reactiveCouchbaseRepository;
+    public UserDaoController(UserDaoLayer userDaoLayer) {
+        this.userDaoLayer = userDaoLayer;
     }
-    */
+    
     @GetMapping(path = "/users")
     public List<String> getUsers() {
-        return reactiveCouchbaseRepository.getUsers("---Prashant::Sharma---" + name);
+        return userDaoLayer.getUsers("---Prashant::Sharma---" + name);
     }
     
     @GetMapping(path = "/users/{value}/value", produces = "application/json")
@@ -46,7 +44,7 @@ public class SpringRestController {
     public List<String> getUsersById(@PathVariable(value = "value") String id,
                                      @RequestParam(required = false, value = "qP",
                                              defaultValue = "DEFAULT") String queryParam1) {
-        return reactiveCouchbaseRepository.getUsers(id + queryParam1);
+        return userDaoLayer.getUsers(id + queryParam1);
     }
     
     @PostMapping(path = "/user/add", consumes = "application/json")
@@ -67,7 +65,7 @@ public class SpringRestController {
             return "All Good";
         });*/
         
-        return reactiveCouchbaseRepository.getUsers(user.getName()).get(0);
+        return userDaoLayer.getUsers(user.getName()).get(0);
     }
     
     @GetMapping("/name/{name}")
@@ -84,7 +82,7 @@ public class SpringRestController {
     // In the case of global level handling we will have to make a class annotated with @RestControllerAdvice
     // or (@ControllerAdvice + @Component).
     @ExceptionHandler(value = InvalidNameException.class)
-    public ResponseEntity<String> handleNameException(InvalidNameException invalidNameExeption) {
-        return ResponseEntity.status(422).body(invalidNameExeption.getMessage());
+    public ResponseEntity<String> handleNameException(InvalidNameException invalidNameException) {
+        return ResponseEntity.status(422).body(invalidNameException.getMessage());
     }
 }
