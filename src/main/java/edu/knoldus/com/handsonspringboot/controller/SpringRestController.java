@@ -1,10 +1,13 @@
 package edu.knoldus.com.handsonspringboot.controller;
 
+import edu.knoldus.com.handsonspringboot.exceptions.InvalidNameExeption;
 import edu.knoldus.com.handsonspringboot.models.User;
 import edu.knoldus.com.handsonspringboot.repository.ReactiveCouchbaseRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,5 +65,22 @@ public class SpringRestController {
         });*/
         
         return reactiveCouchbaseRepository.getUsers(user.getName()).get(0);
+    }
+    
+    @GetMapping("/name/{name}")
+    public String getName(@PathVariable String name) {
+        
+        if (name.length() < 2) {
+            throw new InvalidNameExeption(name);
+        }
+        
+        return name;
+    }
+    
+    // We can have exception handling at a local level like this or we can have the exception handling at the global level.
+    // In the case of global level handling we will have to make a class annotated with @RestControllerAdvice or (@ControlerAdvice + @Component).
+    @ExceptionHandler(value = InvalidNameExeption.class)
+    public ResponseEntity<String> handleNameException(InvalidNameExeption invalidNameExeption) {
+        return ResponseEntity.status(422).body(invalidNameExeption.getMessage());
     }
 }
