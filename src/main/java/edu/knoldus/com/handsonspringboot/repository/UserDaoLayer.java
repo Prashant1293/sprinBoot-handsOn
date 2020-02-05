@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ReactiveCouchbaseRepository {
+public class UserDaoLayer {
     
     private static List<String> users = new ArrayList<>();
     

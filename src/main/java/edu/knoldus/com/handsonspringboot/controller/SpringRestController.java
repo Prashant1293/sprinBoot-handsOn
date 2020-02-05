@@ -1,9 +1,10 @@
 package edu.knoldus.com.handsonspringboot.controller;
 
-import edu.knoldus.com.handsonspringboot.exceptions.InvalidNameExeption;
+import edu.knoldus.com.handsonspringboot.exceptions.InvalidNameException;
 import edu.knoldus.com.handsonspringboot.models.User;
-import edu.knoldus.com.handsonspringboot.repository.ReactiveCouchbaseRepository;
+import edu.knoldus.com.handsonspringboot.repository.UserDaoLayer;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,24 +26,26 @@ import java.util.List;
 @Slf4j
 public class SpringRestController {
     
-    @Value("${name:NOTFOUND}")
+    @Value("${name:NOT-FOUND}")
     private String name;
     
-    private ReactiveCouchbaseRepository reactiveCouchbaseRepository;
+    @Autowired
+    private UserDaoLayer reactiveCouchbaseRepository;
     
-    public SpringRestController(ReactiveCouchbaseRepository reactiveCouchbaseRepository) {
+    /*public SpringRestController(ReactiveCouchbaseRepository reactiveCouchbaseRepository) {
         this.reactiveCouchbaseRepository = reactiveCouchbaseRepository;
     }
-    
+    */
     @GetMapping(path = "/users")
     public List<String> getUsers() {
-        return reactiveCouchbaseRepository.getUsers("PrashantSharma--" + name);
+        return reactiveCouchbaseRepository.getUsers("---Prashant::Sharma---" + name);
     }
     
     @GetMapping(path = "/users/{value}/value", produces = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public List<String> getUsersById(@PathVariable(value = "value") String id,
-                                     @RequestParam(required = false, value = "qP", defaultValue = "DEFAULT") String queryParam1) {
+                                     @RequestParam(required = false, value = "qP",
+                                             defaultValue = "DEFAULT") String queryParam1) {
         return reactiveCouchbaseRepository.getUsers(id + queryParam1);
     }
     
@@ -71,16 +74,17 @@ public class SpringRestController {
     public String getName(@PathVariable String name) {
         
         if (name.length() < 2) {
-            throw new InvalidNameExeption(name);
+            throw new InvalidNameException(name);
         }
         
         return name;
     }
     
     // We can have exception handling at a local level like this or we can have the exception handling at the global level.
-    // In the case of global level handling we will have to make a class annotated with @RestControllerAdvice or (@ControlerAdvice + @Component).
-    @ExceptionHandler(value = InvalidNameExeption.class)
-    public ResponseEntity<String> handleNameException(InvalidNameExeption invalidNameExeption) {
+    // In the case of global level handling we will have to make a class annotated with @RestControllerAdvice
+    // or (@ControllerAdvice + @Component).
+    @ExceptionHandler(value = InvalidNameException.class)
+    public ResponseEntity<String> handleNameException(InvalidNameException invalidNameExeption) {
         return ResponseEntity.status(422).body(invalidNameExeption.getMessage());
     }
 }
