@@ -1,0 +1,10 @@
+``````````````````````````````````````````````````````````````````````````````````````
+http://www.mocky.io/v2/5e418c182f0000cb5458362d
+
+A general 3rd party mock response provider that would send us the response:
+
+{"user": "Mocked User", "id": "MOCK01", "role": "Testing"}
+
+This will be used when we will be implementing the web client in our application.
+
+``````````````````````````````````````````````````````````````````````````````````````
