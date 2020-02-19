@@ -26,15 +26,20 @@ public class MockWebClientController {
     @GetMapping(path = "/{clientId}")
     @ResponseBody
     public Mono<String> getUserFromWebClient(@PathVariable String clientId) {
-        
-        final Mono<String> result = WebClient.builder()
-                .baseUrl(baseUrl)
-                .build()
-                .get()
-                .uri("/v2/{clientId}", clientId)
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .bodyToMono(String.class);
+        Mono<String> result;
+        if (!baseUrl.equalsIgnoreCase("NOT-FOUND")) {
+            result = WebClient.builder()
+                    .baseUrl(baseUrl)
+                    .build()
+                    .get()
+                    .uri("/v2/{clientId}", clientId)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(String.class);
+        } else {
+            log.error("Unable to get the base url for the web client, please check your configurations.");
+            result = Mono.empty();
+        }
         
         return result;
     }
