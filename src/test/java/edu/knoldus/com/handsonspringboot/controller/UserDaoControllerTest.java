@@ -1,7 +1,7 @@
 package edu.knoldus.com.handsonspringboot.controller;
 
 import edu.knoldus.com.handsonspringboot.repository.UserDaoLayer;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -12,15 +12,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-//import org.junit.Test;
 //import org.mockito.junit.MockitoJUnitRunner;
-//import static org.junit.Assert.assertEquals;
-//import static org.junit.Assert.assertFalse;
 
 @SpringBootTest
 //@RunWith(SpringJUnit4ClassRunner.class)
