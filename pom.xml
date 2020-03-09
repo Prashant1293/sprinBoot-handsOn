@@ -115,6 +115,7 @@
       <version>3.0.0-SNAPSHOT</version>
     </dependency>
 
+    <!--Not required if you are building a non-reactive API-->
     <dependency>
       <groupId>io.springfox</groupId>
       <artifactId>springfox-spring-webflux</artifactId>
@@ -123,7 +124,7 @@
 
   </dependencies>
 
-  <!--For Spring webflux application this is required repo.-->
+  <!--For Spring webflux-swagger document application this is required repo.-->
   <repositories>
     <repository>
       <id>spring-libs-milestone</id>
